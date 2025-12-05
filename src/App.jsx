@@ -67,6 +67,16 @@ const AlertTriangle = ({ className }) => (
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
   </svg>
 );
+const ChevronDown = ({ className }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+  </svg>
+);
+const Info = ({ className }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
 
 // --- Components ---
 
@@ -159,7 +169,7 @@ function App() {
                   <div className="h-8 w-1/3 bg-gray-200 rounded-md animate-pulse"></div>
                   <div className="flex-1 bg-blue-50/50 rounded-xl border border-blue-100 p-4 flex items-center justify-center">
                     <div className="text-center">
-                      <div className="text-4xl font-bold text-blue-600 mb-2">87%</div>
+                      <div className="text-4xl font-bold text-blue-600 mb-2">90%</div>
                       <div className="text-sm text-gray-500">지급 승률 예측</div>
                     </div>
                   </div>
@@ -202,6 +212,105 @@ function App() {
           </div>
         </div>
       </section>
+
+      {/* Sequential Service Listing */}
+
+      {/* 1. AI Assessment Teaser */}
+      <section className="px-6 py-20 md:py-32 border-t border-gray-100">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+          <div className="flex-1">
+            <div className="inline-block px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-semibold mb-6">
+              AI 사전/사후 점검
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              청구하기 전,<br />
+              <span className="text-blue-600">승소 확률</span>을 미리 확인하세요.
+            </h2>
+            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              수만 건의 판례와 약관 데이터를 학습한 AI가 당신의 진단서와 의무기록을 분석합니다.<br />
+              부지급 확률이 높다면, 대응 논리까지 만들어 드립니다.
+            </p>
+            <button onClick={() => navigateTo('assessment')} className="text-blue-600 font-bold text-lg flex items-center gap-2 hover:gap-3 transition-all">
+              AI 진단 자세히 보기 <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="flex-1 w-full">
+            <div className="bg-gray-100 rounded-3xl aspect-video relative overflow-hidden shadow-lg">
+              {/* Placeholder for AI Demo UI */}
+              <div className="absolute inset-0 flex items-center justify-center bg-white">
+                <div className="text-center">
+                  <div className="text-5xl font-bold text-blue-600 mb-2">90%</div>
+                  <div className="text-gray-500">지급 가능성 예측</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. Adjuster Right Teaser */}
+      <section className="px-6 py-20 md:py-32 bg-gray-50">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center gap-16">
+          <div className="flex-1">
+            <div className="inline-block px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm font-semibold mb-6">
+              손해사정사 선임권
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              보험사가 보낸 조사관,<br />
+              <span className="text-green-600">거절할 권리</span>가 있습니다.
+            </h2>
+            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              보험업법에 따라 소비자는 독립 손해사정사를 직접 선임할 수 있습니다.<br />
+              비용은 보험사가 냅니다. 내 편이 되어줄 전문가를 무료로 만나보세요.
+            </p>
+            <button onClick={() => navigateTo('adjuster')} className="text-green-600 font-bold text-lg flex items-center gap-2 hover:gap-3 transition-all">
+              선임권 활용법 보기 <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="flex-1 w-full">
+            <div className="bg-white rounded-3xl aspect-video relative overflow-hidden shadow-lg border border-gray-100 p-8 flex items-center justify-center">
+              <ShieldCheck className="w-32 h-32 text-green-100" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-2xl font-bold text-green-600">Consumer Rights</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Valuemark Teaser */}
+      <section className="px-6 py-20 md:py-32 bg-gray-900 text-white">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="inline-block px-3 py-1 bg-white/10 text-white rounded-full text-sm font-semibold mb-6 border border-white/20">
+            Official Partner (주)밸류마크
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold mb-8">
+            사고는 막을 수 없지만,<br />
+            <span className="text-blue-400">피해는 최소화</span>할 수 있습니다.
+          </h2>
+          <p className="text-lg text-gray-300 mb-12 max-w-2xl mx-auto">
+            보험금 청구 후, 많은 분들이 보장 공백을 걱정하십니다.<br />
+            국내 최고 법인보험대리점 밸류마크와 함께 우리 가족의 보험을 점검해보세요.
+          </p>
+          <button onClick={() => navigateTo('valuemark')} className="px-8 py-4 bg-white text-gray-900 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all">
+            무료 보장분석 신청하기
+          </button>
+        </div>
+      </section>
+
+      {/* 4. B2B Teaser */}
+      <section className="px-6 py-20 md:py-32">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">함께 성장할 파트너를 찾습니다</h2>
+            <p className="text-gray-600">보험사, 병원, 손해사정법인 등 다양한 파트너와 협력하고 있습니다.</p>
+          </div>
+          <button onClick={() => navigateTo('b2b')} className="px-8 py-4 border-2 border-gray-900 text-gray-900 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all">
+            제휴 문의하기
+          </button>
+        </div>
+      </section>
+
     </motion.div>
   );
 
@@ -224,8 +333,41 @@ function App() {
       }
     }, [step]);
 
+    // Accordion Item Component
+    const AccordionItem = ({ date, title, content }) => {
+      const [isOpen, setIsOpen] = useState(false);
+      return (
+        <div className="border border-gray-200 rounded-xl overflow-hidden mb-3">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-full flex items-center justify-between p-4 bg-white hover:bg-gray-50 transition-colors text-left"
+          >
+            <div className="flex items-center gap-4">
+              <span className="text-sm font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded">{date}</span>
+              <span className="font-bold text-gray-900">{title}</span>
+            </div>
+            <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+          </button>
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="bg-gray-50 border-t border-gray-200"
+              >
+                <div className="p-4 text-sm text-gray-700 leading-relaxed">
+                  {content}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      );
+    };
+
     return (
-      <div className="pt-24 pb-20 px-6 min-h-screen bg-gray-50">
+      <div className="pt-24 pb-32 px-6 min-h-screen bg-gray-50">
         <div className="max-w-3xl mx-auto">
           {step === 'upload' && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl shadow-xl p-8 md:p-12">
@@ -274,23 +416,25 @@ function App() {
 
           {step === 'result' && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-              {/* Score Card */}
-              <div className="bg-white rounded-3xl shadow-xl p-8 border border-white/50 backdrop-blur-sm relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
-                <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+
+              {/* A. Hero Metric Score Card */}
+              <div className="bg-gradient-to-br from-[#0F172A] to-[#1E293B] rounded-3xl shadow-2xl p-8 md:p-10 text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+
+                <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
+                  {/* Animated Progress Ring */}
                   <div className="relative w-48 h-48 flex-shrink-0">
-                    {/* Gauge Chart SVG */}
                     <svg className="w-full h-full transform -rotate-90">
-                      <circle cx="96" cy="96" r="88" stroke="#f1f5f9" strokeWidth="16" fill="none" />
+                      <circle cx="96" cy="96" r="88" stroke="#334155" strokeWidth="12" fill="none" />
                       <motion.circle
                         cx="96" cy="96" r="88"
-                        stroke="#3b82f6"
-                        strokeWidth="16"
+                        stroke="#3B82F6"
+                        strokeWidth="12"
                         fill="none"
                         strokeDasharray="553"
                         strokeDashoffset="553"
-                        animate={{ strokeDashoffset: 553 - (553 * 0.87) }}
-                        transition={{ duration: 1.5, ease: "easeOut" }}
+                        animate={{ strokeDashoffset: 553 - (553 * 0.90) }}
+                        transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
                         strokeLinecap="round"
                       />
                     </svg>
@@ -298,56 +442,93 @@ function App() {
                       <motion.span
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 1 }}
-                        className="text-5xl font-bold text-gray-900"
+                        transition={{ delay: 0.5, type: "spring" }}
+                        className="text-6xl font-bold tracking-tighter"
                       >
-                        87%
+                        90%
                       </motion.span>
-                      <span className="text-sm font-medium text-gray-500 mt-1">지급 승률</span>
+                      <span className="text-blue-400 font-medium mt-2 text-sm">지급 가능성</span>
                     </div>
                   </div>
-                  <div className="flex-1 text-center md:text-left">
-                    <div className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-bold mb-4">
-                      청구 가능성 높음
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">충분히 승산이 있는 건입니다.</h3>
-                    <p className="text-gray-600 leading-relaxed mb-6">
-                      제출하신 자료를 분석한 결과, 약관 제 15조 2항에 의거하여 지급 대상에 해당할 확률이 매우 높습니다. 다만, 의료 자문 결과에 따라 분쟁 소지가 있습니다.
+
+                  <div className="text-center md:text-left flex-1">
+                    <h3 className="text-3xl font-bold mb-4 leading-tight">
+                      <span className="text-blue-400">긍정적</span>입니다.<br />
+                      청구 승산이 충분합니다.
+                    </h3>
+                    <p className="text-gray-300 leading-relaxed text-sm md:text-base">
+                      제출하신 진단서와 약관(제15조 2항)을 대조한 결과, 지급 요건을 대부분 충족합니다. 다만, 과거 병력에 대한 설명이 추가로 필요할 수 있습니다.
                     </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* B. Risk Alert Banner */}
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="bg-red-50 border border-red-100 rounded-2xl p-5 flex items-start gap-4"
+              >
+                <div className="bg-red-100 p-2 rounded-full flex-shrink-0">
+                  <AlertTriangle className="w-6 h-6 text-red-600" />
+                </div>
+                <div>
+                  <h4 className="text-red-800 font-bold text-lg mb-1">잠깐! 고지의무 위반 리스크가 감지되었습니다.</h4>
+                  <p className="text-red-600 text-sm leading-relaxed">
+                    2년 전 '위염' 진료 기록(2023.05.12)이 발견되었습니다. 가입 시 해당 내용을 고지하지 않았다면, 보험금이 부지급되거나 계약이 해지될 수 있습니다.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* C. Medical Record Summary (Accordion) */}
+              <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-6 md:p-8">
+                <div className="flex items-center gap-2 mb-6">
+                  <FileText className="w-6 h-6 text-blue-600" />
+                  <h3 className="text-xl font-bold text-gray-900">AI 의무기록 요약</h3>
+                </div>
+
+                <AccordionItem
+                  date="2023.08.15"
+                  title="서울대학교병원 소화기내과 내원"
+                  content={
+                    <span>
+                      주상병: <span className="font-semibold text-blue-600 cursor-help" title="위 점막에 염증이 생긴 상태">상세불명의 위염(K29.7)</span><br />
+                      처방: 위산분비억제제 2주분 처방함. 환자가 속쓰림을 호소하여 내시경 권유하였으나 거절함.
+                    </span>
+                  }
+                />
+                <AccordionItem
+                  date="2023.09.01"
+                  title="동네 내과 재방문"
+                  content="증상 호전되어 약물 처방 없이 경과 관찰하기로 함."
+                />
+              </div>
+
+              {/* D. Payment Lock & Sticky CTA */}
+              <div className="sticky bottom-6 z-30">
+                <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200 p-6 md:p-8 text-center relative overflow-hidden">
+                  {/* Background Pattern */}
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-red-500"></div>
+
+                  <div className="flex flex-col items-center justify-center gap-4">
+                    <div className="flex items-center gap-2 text-gray-900 font-bold text-lg">
+                      <Lock className="w-5 h-5 text-gray-500" />
+                      <span>상세 분석 리포트 잠금</span>
+                    </div>
+                    <p className="text-gray-500 text-sm mb-2">약관 기반 반박 논리, 필요 보완 서류 체크리스트, 전문가 소견 포함</p>
+
                     <button
                       onClick={() => setShowPaymentModal(true)}
-                      className="w-full md:w-auto px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200"
+                      className="w-full md:w-auto px-8 py-4 bg-[#F59E0B] hover:bg-orange-600 text-white rounded-xl font-bold text-lg shadow-lg shadow-orange-200 transition-all flex items-center justify-center gap-2"
                     >
-                      상세 리포트 확인하기 (15,000원)
+                      <span>15,000원 결제하고 전체 보기</span>
+                      <ArrowRight className="w-5 h-5" />
                     </button>
                   </div>
                 </div>
               </div>
 
-              {/* Locked Content */}
-              <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-8 opacity-75 relative overflow-hidden">
-                <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-10 flex flex-col items-center justify-center text-center p-6">
-                  <Lock className="w-12 h-12 text-gray-400 mb-4" />
-                  <h4 className="text-xl font-bold text-gray-900 mb-2">상세 분석 내용은 리포트 구매 후 확인 가능합니다</h4>
-                  <p className="text-gray-500 mb-6">약관 기반 반박 논리, 필요 보완 서류 체크리스트 포함</p>
-                  <button
-                    onClick={() => setShowPaymentModal(true)}
-                    className="px-6 py-3 bg-gray-900 text-white rounded-xl font-bold hover:bg-gray-800 transition-colors"
-                  >
-                    지금 결제하고 잠금 해제
-                  </button>
-                </div>
-
-                {/* Dummy Content underneath */}
-                <div className="filter blur-sm select-none">
-                  <h4 className="font-bold text-lg mb-4">약관 기반 반박 논리</h4>
-                  <div className="space-y-3">
-                    <div className="h-4 bg-gray-100 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-100 rounded w-1/2"></div>
-                    <div className="h-4 bg-gray-100 rounded w-5/6"></div>
-                  </div>
-                </div>
-              </div>
             </motion.div>
           )}
         </div>
