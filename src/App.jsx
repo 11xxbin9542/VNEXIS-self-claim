@@ -126,8 +126,9 @@ function App() {
               transition={{ delay: 0.2 }}
               className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight break-keep"
             >
-              보험사와의 기울어진 운동장,<br />
-              <span className="text-blue-600">기술로 바로잡습니다.</span>
+              보험사와의 싸움,<br />
+              계란으로 바위 치기?<br />
+              <span className="text-blue-600">이제 바위가 깨집니다.</span>
             </motion.h1>
             <motion.p
               initial={{ y: 20, opacity: 0 }}
@@ -135,8 +136,8 @@ function App() {
               transition={{ delay: 0.3 }}
               className="text-lg md:text-xl text-gray-600 leading-relaxed break-keep max-w-2xl"
             >
-              AI 진단부터 청구, 그리고 보장 분석까지.<br />
-              당신의 정당한 권리를 지키는 올인원 솔루션, VNEXIS.
+              청구 전 3분 AI 진단부터, 거절 시 대응 논리, 손해사정사 선임까지.<br />
+              보험사가 알려주지 않는 당신의 무기, 안티그레비티.
             </motion.p>
             <motion.div
               initial={{ y: 20, opacity: 0 }}
@@ -148,11 +149,8 @@ function App() {
                 onClick={() => navigateTo('assessment')}
                 className="px-8 py-4 bg-gray-900 text-white rounded-xl font-bold text-lg hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
               >
-                AI 무료 진단 시작하기
+                무료로 내 승소 확률 확인하기
                 <ArrowRight className="w-5 h-5" />
-              </button>
-              <button className="px-8 py-4 bg-white text-gray-900 border border-gray-200 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
-                서비스 소개 영상
               </button>
             </motion.div>
           </div>
@@ -223,13 +221,19 @@ function App() {
               AI 사전/사후 점검
             </div>
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-              청구하기 전,<br />
-              <span className="text-blue-600">승소 확률</span>을 미리 확인하세요.
+              의사만 아는 진료기록,<br />
+              <span className="text-blue-600">AI가 번역해 드립니다.</span>
             </h2>
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              수만 건의 판례와 약관 데이터를 학습한 AI가 당신의 진단서와 의무기록을 분석합니다.<br />
-              부지급 확률이 높다면, 대응 논리까지 만들어 드립니다.
-            </p>
+            <div className="space-y-4 mb-8">
+              <div className="bg-gray-50 p-4 rounded-xl">
+                <span className="font-bold text-gray-900 block mb-1">청구 전</span>
+                <p className="text-gray-600 text-sm">청구했다가 거절당하면 기록만 남습니다. 보내기 전에 먼저 승률을 확인하세요.</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-xl">
+                <span className="font-bold text-gray-900 block mb-1">부지급 통보 후</span>
+                <p className="text-gray-600 text-sm">보험사의 '지급 거절' 문자가 끝이 아닙니다. 반박할 수 있는 '약관의 빈틈'을 찾아드립니다.</p>
+              </div>
+            </div>
             <button onClick={() => navigateTo('assessment')} className="text-blue-600 font-bold text-lg flex items-center gap-2 hover:gap-3 transition-all">
               AI 진단 자세히 보기 <ArrowRight className="w-5 h-5" />
             </button>
@@ -256,15 +260,15 @@ function App() {
               손해사정사 선임권
             </div>
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-              보험사가 보낸 조사관,<br />
-              <span className="text-green-600">거절할 권리</span>가 있습니다.
+              보험사가 보낸 조사관은<br />
+              <span className="text-green-600">누구 편일까요?</span>
             </h2>
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              보험업법에 따라 소비자는 독립 손해사정사를 직접 선임할 수 있습니다.<br />
-              비용은 보험사가 냅니다. 내 편이 되어줄 전문가를 무료로 만나보세요.
+              나오라는 보험금은 안 주고 현장 심사를 나온다고요? 당황하지 마세요.<br />
+              법적으로 당신은 <strong>'내 편인 전문가'</strong>를 무료로 선임할 권리가 있습니다.
             </p>
             <button onClick={() => navigateTo('adjuster')} className="text-green-600 font-bold text-lg flex items-center gap-2 hover:gap-3 transition-all">
-              선임권 활용법 보기 <ArrowRight className="w-5 h-5" />
+              내 지역 무료 손해사정사 매칭받기 <ArrowRight className="w-5 h-5" />
             </button>
           </div>
           <div className="flex-1 w-full">
@@ -278,27 +282,53 @@ function App() {
         </div>
       </section>
 
-      {/* 3. Valuemark Teaser */}
+      {/* 3. Claim Filing Teaser (NEW) */}
+      <section className="px-6 py-20 md:py-32">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+          <div className="flex-1">
+            <div className="inline-block px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-sm font-semibold mb-6">
+              원스톱 청구 대행
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              복잡한 서류, 팩스, 반려...<br />
+              <span className="text-purple-600">귀찮은 건 저희가 합니다.</span>
+            </h2>
+            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              사진만 찍어 올리세요. 분류, 기입, 제출까지 1분이면 끝납니다.
+            </p>
+            <button className="text-purple-600 font-bold text-lg flex items-center gap-2 hover:gap-3 transition-all">
+              간편 청구 시작하기 <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="flex-1 w-full">
+            <div className="bg-gray-100 rounded-3xl aspect-video relative overflow-hidden shadow-lg flex items-center justify-center">
+              <Send className="w-32 h-32 text-purple-200" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Valuemark Teaser */}
       <section className="px-6 py-20 md:py-32 bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-block px-3 py-1 bg-white/10 text-white rounded-full text-sm font-semibold mb-6 border border-white/20">
             Official Partner (주)밸류마크
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-8">
-            사고는 막을 수 없지만,<br />
-            <span className="text-blue-400">피해는 최소화</span>할 수 있습니다.
+            소 잃고 외양간 고치기?<br />
+            <span className="text-blue-400">이번엔 제대로 고칩시다.</span>
           </h2>
           <p className="text-lg text-gray-300 mb-12 max-w-2xl mx-auto">
-            보험금 청구 후, 많은 분들이 보장 공백을 걱정하십니다.<br />
-            국내 최고 법인보험대리점 밸류마크와 함께 우리 가족의 보험을 점검해보세요.
+            이번 사고로 느끼셨죠? 보험은 필요할 때 없으면 재앙입니다.<br />
+            대한민국 1등 GA (주)밸류마크가 당신과 가족의 '진짜 안전망'을 점검해 드립니다.
           </p>
           <button onClick={() => navigateTo('valuemark')} className="px-8 py-4 bg-white text-gray-900 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all">
-            무료 보장분석 신청하기
+            VNEXIS 회원 한정 : 프리미엄 보장 분석 무료 신청
           </button>
         </div>
       </section>
 
-      {/* 4. B2B Teaser */}
+      {/* 5. B2B Teaser */}
       <section className="px-6 py-20 md:py-32">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
           <div>
@@ -316,6 +346,7 @@ function App() {
 
   const AssessmentView = () => {
     const [step, setStep] = useState('upload'); // upload, analyzing, result
+    const [mode, setMode] = useState('pre'); // pre (청구 전), post (부지급 후)
 
     useEffect(() => {
       if (step === 'analyzing') {
@@ -371,12 +402,24 @@ function App() {
         <div className="max-w-3xl mx-auto">
           {step === 'upload' && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl shadow-xl p-8 md:p-12">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">AI 진단 시작하기</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">의사만 아는 진료기록,<br />AI가 번역해 드립니다.</h2>
               <p className="text-gray-600 mb-8">부지급 안내문이나 의무기록지를 업로드하세요.</p>
 
-              <div className="flex gap-4 mb-8">
-                <button className="flex-1 py-3 px-4 rounded-xl bg-blue-50 text-blue-700 font-semibold border-2 border-blue-200">청구 전 사전 점검</button>
-                <button className="flex-1 py-3 px-4 rounded-xl bg-white text-gray-600 font-semibold border-2 border-gray-100 hover:border-gray-200">부지급 통보 후 대응</button>
+              <div className="flex flex-col md:flex-row gap-4 mb-8">
+                <button
+                  onClick={() => setMode('pre')}
+                  className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${mode === 'pre' ? 'border-blue-500 bg-blue-50' : 'border-gray-100 hover:border-gray-200'}`}
+                >
+                  <div className={`font-bold mb-1 ${mode === 'pre' ? 'text-blue-700' : 'text-gray-900'}`}>청구 전 사전 점검</div>
+                  <div className="text-sm text-gray-600">청구했다가 거절당하면 기록만 남습니다. 보내기 전에 먼저 승률을 확인하세요.</div>
+                </button>
+                <button
+                  onClick={() => setMode('post')}
+                  className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${mode === 'post' ? 'border-blue-500 bg-blue-50' : 'border-gray-100 hover:border-gray-200'}`}
+                >
+                  <div className={`font-bold mb-1 ${mode === 'post' ? 'text-blue-700' : 'text-gray-900'}`}>부지급 통보 후 대응</div>
+                  <div className="text-sm text-gray-600">보험사의 '지급 거절' 문자가 끝이 아닙니다. 반박할 수 있는 '약관의 빈틈'을 찾아드립니다.</div>
+                </button>
               </div>
 
               <div
@@ -516,15 +559,16 @@ function App() {
                       <Lock className="w-5 h-5 text-gray-500" />
                       <span>상세 분석 리포트 잠금</span>
                     </div>
-                    <p className="text-gray-500 text-sm mb-2">약관 기반 반박 논리, 필요 보완 서류 체크리스트, 전문가 소견 포함</p>
+                    <p className="text-gray-500 text-sm mb-2">판독 결과, 보험사가 꼼짝 못 할 핵심 반박 논리 3가지가 발견되었습니다.</p>
 
                     <button
                       onClick={() => setShowPaymentModal(true)}
                       className="w-full md:w-auto px-8 py-4 bg-[#F59E0B] hover:bg-orange-600 text-white rounded-xl font-bold text-lg shadow-lg shadow-orange-200 transition-all flex items-center justify-center gap-2"
                     >
-                      <span>15,000원 결제하고 전체 보기</span>
+                      <span>리포트 전문 확인하기 (15,000원)</span>
                       <ArrowRight className="w-5 h-5" />
                     </button>
+                    <p className="text-xs text-gray-400">커피 3잔 값으로 수백만 원을 지키세요</p>
                   </div>
                 </div>
               </div>
@@ -539,11 +583,10 @@ function App() {
   const AdjusterView = () => (
     <div className="pt-24 pb-20 px-6 max-w-5xl mx-auto">
       <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">손해사정사 선임권이란?</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">보험사가 보낸 조사관은<br />누구 편일까요?</h2>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          보험금 청구 후 보험사가 실사를 나온다고 할 때,<br className="hidden md:block" />
-          <span className="text-blue-600 font-bold">소비자가 직접 전문가를 선임할 수 있는 법적 권리</span>입니다.<br />
-          (비용은 보험사가 부담합니다)
+          나오라는 보험금은 안 주고 현장 심사를 나온다고요? 당황하지 마세요.<br />
+          법적으로 당신은 <strong>'내 편인 전문가'</strong>를 무료로 선임할 권리가 있습니다.
         </p>
       </div>
 
@@ -567,7 +610,7 @@ function App() {
         <h3 className="text-2xl font-bold mb-4">내 사건에 딱 맞는 전문가를 찾고 계신가요?</h3>
         <p className="text-blue-100 mb-8">VNEXIS가 검증된 독립 손해사정사를 무료로 매칭해드립니다.</p>
         <button className="px-8 py-4 bg-white text-blue-600 rounded-xl font-bold text-lg hover:bg-blue-50 transition-colors">
-          전문가 무료 매칭하기
+          내 지역 무료 손해사정사 매칭받기
         </button>
       </div>
     </div>
@@ -582,12 +625,12 @@ function App() {
             Official Partner (주)밸류마크
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            사고는 예고 없이 찾아옵니다.<br />
-            지금 당신의 우산은 튼튼한가요?
+            소 잃고 외양간 고치기?<br />
+            <span className="text-blue-400">이번엔 제대로 고칩시다.</span>
           </h2>
           <p className="text-lg text-gray-300 mb-10 leading-relaxed">
-            보험금 청구 후, 많은 분들이 보장 공백을 걱정하십니다.<br />
-            전문가와 함께 우리 가족의 보험을 점검해보세요.
+            이번 사고로 느끼셨죠? 보험은 필요할 때 없으면 재앙입니다.<br />
+            대한민국 1등 GA (주)밸류마크가 당신과 가족의 '진짜 안전망'을 점검해 드립니다.
           </p>
 
           <div className="bg-white rounded-2xl p-8 max-w-md text-gray-900">
@@ -596,7 +639,7 @@ function App() {
               <input type="text" placeholder="이름" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-600" />
               <input type="tel" placeholder="연락처" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-600" />
               <button className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors">
-                신청하고 리포트 받기
+                VNEXIS 회원 한정 : 프리미엄 보장 분석 무료 신청
               </button>
             </div>
             <p className="text-xs text-gray-500 mt-4 text-center">신청 시 '우리 가족 보험 요약 리포트'가 무료로 제공됩니다.</p>
