@@ -85,6 +85,7 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentView, setCurrentView] = useState('home'); // home, assessment, result, adjuster, valuemark, b2b
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // login, signup
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -776,18 +777,42 @@ function App() {
             onClick={e => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-bold">로그인</h3>
+              <h3 className="text-2xl font-bold">{authMode === 'login' ? '로그인' : '회원가입'}</h3>
               <button onClick={() => setShowAuthModal(false)}><X className="w-6 h-6 text-gray-400" /></button>
             </div>
             <div className="space-y-3">
-              <button className="w-full py-3 bg-[#FEE500] rounded-xl font-semibold text-[#191919]">카카오로 3초 만에 시작하기</button>
-              <button className="w-full py-3 bg-[#03C75A] rounded-xl font-semibold text-white">네이버로 시작하기</button>
+              <button className="w-full py-3 bg-[#FEE500] rounded-xl font-semibold text-[#191919]">카카오로 3초 만에 {authMode === 'login' ? '시작하기' : '가입하기'}</button>
+              <button className="w-full py-3 bg-[#03C75A] rounded-xl font-semibold text-white">네이버로 {authMode === 'login' ? '시작하기' : '가입하기'}</button>
               <div className="relative py-4">
                 <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-100"></div></div>
                 <div className="relative flex justify-center text-sm"><span className="px-2 bg-white text-gray-500">또는</span></div>
               </div>
-              <input type="email" placeholder="이메일" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-600" />
-              <button className="w-full py-3 bg-gray-900 text-white rounded-xl font-bold">이메일로 로그인</button>
+
+              <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
+                {authMode === 'signup' && (
+                  <input type="text" placeholder="이름" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-600" />
+                )}
+                <input type="email" placeholder="이메일" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-600" />
+                <input type="password" placeholder="비밀번호" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-600" />
+                {authMode === 'signup' && (
+                  <input type="password" placeholder="비밀번호 확인" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-600" />
+                )}
+                <button className="w-full py-3 bg-gray-900 text-white rounded-xl font-bold">
+                  {authMode === 'login' ? '이메일로 로그인' : '이메일로 회원가입'}
+                </button>
+              </form>
+
+              <div className="text-center mt-4 text-sm text-gray-500">
+                {authMode === 'login' ? (
+                  <>
+                    계정이 없으신가요? <button onClick={() => setAuthMode('signup')} className="text-blue-600 font-bold hover:underline">회원가입</button>
+                  </>
+                ) : (
+                  <>
+                    이미 계정이 있으신가요? <button onClick={() => setAuthMode('login')} className="text-blue-600 font-bold hover:underline">로그인</button>
+                  </>
+                )}
+              </div>
             </div>
           </motion.div>
         </div>
