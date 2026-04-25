@@ -754,7 +754,7 @@ function App() {
         {currentView === 'adjuster' && <AdjusterView />}
         {currentView === 'valuemark' && <ValuemarkView />}
         {currentView === 'b2b' && <B2BView />}
-        {currentView === 'analysis' && <AnalysisPanel />}
+        {currentView === 'analysis' && <AnalysisPanel onPaymentClick={() => setShowPaymentModal(true)} />}
       </main>
 
       {/* Footer */}
