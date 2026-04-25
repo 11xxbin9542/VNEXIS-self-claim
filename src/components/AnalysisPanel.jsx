@@ -87,7 +87,6 @@ export default function AnalysisPanel({ onPaymentClick }) {
         <input
           type="file"
           accept="application/pdf"
-          capture
           className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
           onChange={(e) => handleFile(e.target.files?.[0])}
         />
