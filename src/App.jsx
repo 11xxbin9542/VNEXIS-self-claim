@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import AnalysisPanel from './components/AnalysisPanel';
 
 // --- Icons (Lucide React style SVGs) ---
 const Menu = ({ className }) => (
@@ -83,7 +84,7 @@ const Info = ({ className }) => (
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [currentView, setCurrentView] = useState('home'); // home, assessment, result, adjuster, valuemark, b2b
+  const [currentView, setCurrentView] = useState('home'); // home, assessment, result, adjuster, valuemark, b2b, analysis
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState('login'); // login, signup
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -699,6 +700,7 @@ function App() {
             <button onClick={() => navigateTo('adjuster')} className="text-sm font-medium text-gray-600 hover:text-gray-900">손해사정사 선임</button>
             <button onClick={() => navigateTo('valuemark')} className="text-sm font-medium text-gray-600 hover:text-gray-900">보장분석</button>
             <button onClick={() => navigateTo('b2b')} className="text-sm font-medium text-gray-600 hover:text-gray-900">제휴문의</button>
+            <button onClick={() => navigateTo('analysis')} className="text-sm font-semibold text-blue-600 hover:text-blue-800">진단 분석</button>
           </div>
 
           <div className="hidden md:flex items-center gap-4">
@@ -736,6 +738,7 @@ function App() {
               <button onClick={() => navigateTo('adjuster')} className="text-left">손해사정사 선임</button>
               <button onClick={() => navigateTo('valuemark')} className="text-left">보장분석</button>
               <button onClick={() => navigateTo('b2b')} className="text-left">제휴문의</button>
+              <button onClick={() => navigateTo('analysis')} className="text-left text-blue-600 font-semibold">진단 분석</button>
               <hr className="border-gray-100" />
               <button onClick={() => { setShowAuthModal(true); setMobileMenuOpen(false); }} className="text-left text-blue-600">로그인</button>
             </div>
@@ -751,6 +754,7 @@ function App() {
         {currentView === 'adjuster' && <AdjusterView />}
         {currentView === 'valuemark' && <ValuemarkView />}
         {currentView === 'b2b' && <B2BView />}
+        {currentView === 'analysis' && <AnalysisPanel />}
       </main>
 
       {/* Footer */}
