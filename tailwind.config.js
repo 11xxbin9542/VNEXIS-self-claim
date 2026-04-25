@@ -22,10 +22,15 @@ export default {
                         opacity: '1',
                         transform: 'translateY(0)'
                     },
-                }
+                },
+                'shimmer': {
+                    '0%': { backgroundPosition: '-200% 0' },
+                    '100%': { backgroundPosition: '200% 0' },
+                },
             },
             animation: {
-                'fade-in-down': 'fade-in-down 0.3s ease-out'
+                'fade-in-down': 'fade-in-down 0.3s ease-out',
+                'shimmer': 'shimmer 1.8s infinite linear',
             }
         },
     },
