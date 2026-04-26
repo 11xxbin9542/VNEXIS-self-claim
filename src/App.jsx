@@ -102,6 +102,10 @@ function App() {
     window.scrollTo(0, 0);
   };
 
+  const TAB_VIEWS = ['assessment', 'adjuster', 'valuemark', 'b2b', 'analysis'];
+  const handleTabChange = (idx) => navigateTo(TAB_VIEWS[idx] || 'home');
+  const activeTab = TAB_VIEWS.indexOf(currentView);
+
   // --- Views ---
 
   const HomeView = () => (
@@ -688,69 +692,62 @@ function App() {
 
   return (
     <div className="bg-white min-h-screen font-sans text-gray-900 selection:bg-blue-100 selection:text-blue-900">
-      {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-100' : 'bg-transparent'}`}>
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="text-2xl font-extrabold tracking-tight cursor-pointer" onClick={() => navigateTo('home')}>
-            VNEXIS
-          </div>
-
-          <div className="hidden md:flex items-center gap-8">
-            <button onClick={() => navigateTo('assessment')} className="text-sm font-medium text-gray-600 hover:text-gray-900">AI 진단</button>
-            <button onClick={() => navigateTo('adjuster')} className="text-sm font-medium text-gray-600 hover:text-gray-900">손해사정사 선임</button>
-            <button onClick={() => navigateTo('valuemark')} className="text-sm font-medium text-gray-600 hover:text-gray-900">보장분석</button>
-            <button onClick={() => navigateTo('b2b')} className="text-sm font-medium text-gray-600 hover:text-gray-900">제휴문의</button>
-            <button onClick={() => navigateTo('analysis')} className="text-sm font-semibold text-blue-600 hover:text-blue-800">진단 분석</button>
-          </div>
-
-          <div className="hidden md:flex items-center gap-4">
-            <button onClick={() => setShowAuthModal(true)} className="text-sm font-medium text-gray-600 hover:text-gray-900">로그인</button>
-            <button onClick={() => navigateTo('assessment')} className="px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200">
-              무료 시작
+      {/* ── 상단 Nav (PC용) ── */}
+      <nav className="hidden md:flex fixed top-0 left-0 right-0 z-50 bg-navy h-[52px] items-center justify-between px-8 border-b border-navy-80">
+        <span
+          className="font-sans text-white font-medium tracking-wide text-base cursor-pointer"
+          onClick={() => navigateTo('home')}
+        >
+          VNX<span className="text-brand-blue-light">EXIS</span>
+        </span>
+        <div className="flex items-center gap-6">
+          {['AI 진단', '손해사정사 선임', '보장분석', '제휴문의'].map((label, i) => (
+            <button
+              key={i}
+              onClick={() => handleTabChange(i)}
+              className={`text-xs font-sans transition-colors ${
+                activeTab === i ? 'text-white font-medium' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              {label}
             </button>
-          </div>
-
-          <button className="md:hidden" onClick={() => setMobileMenuOpen(true)}>
-            <Menu className="w-6 h-6" />
-          </button>
+          ))}
         </div>
+        <button
+          onClick={() => setShowAuthModal(true)}
+          className="text-xs font-medium bg-brand-blue hover:bg-blue-700 text-white px-4 py-1.5 rounded-sm font-sans transition-colors"
+        >
+          로그인
+        </button>
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[60] bg-white p-6 md:hidden"
+      {/* ── 하단 Nav (모바일용) ── */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-surface-border flex">
+        {[
+          { icon: '⚕', label: 'AI 진단', idx: 0 },
+          { icon: '👤', label: '손해사정사', idx: 1 },
+          { icon: '🛡', label: '보장분석', idx: 2 },
+          { icon: '💬', label: '제휴문의', idx: 3 },
+          { icon: '📊', label: '진단분석', idx: 4 },
+        ].map(({ icon, label, idx }) => (
+          <button
+            key={idx}
+            onClick={() => handleTabChange(idx)}
+            className={`flex-1 flex flex-col items-center py-2 gap-0.5 font-sans transition-colors ${
+              activeTab === idx ? 'text-brand-blue' : 'text-slate-400'
+            }`}
           >
-            <div className="flex justify-between items-center mb-8">
-              <div className="text-2xl font-extrabold">VNEXIS</div>
-              <button onClick={() => setMobileMenuOpen(false)}>
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="flex flex-col gap-6 text-lg font-medium">
-              <button onClick={() => navigateTo('home')} className="text-left">홈</button>
-              <button onClick={() => navigateTo('assessment')} className="text-left">AI 진단</button>
-              <button onClick={() => navigateTo('adjuster')} className="text-left">손해사정사 선임</button>
-              <button onClick={() => navigateTo('valuemark')} className="text-left">보장분석</button>
-              <button onClick={() => navigateTo('b2b')} className="text-left">제휴문의</button>
-              <button onClick={() => navigateTo('analysis')} className="text-left text-blue-600 font-semibold">진단 분석</button>
-              <hr className="border-gray-100" />
-              <button onClick={() => { setShowAuthModal(true); setMobileMenuOpen(false); }} className="text-left text-blue-600">로그인</button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <span className="text-base leading-none">{icon}</span>
+            <span className="text-[9px] font-medium">{label}</span>
+          </button>
+        ))}
+      </nav>
 
       {/* Main Content Area */}
-      <main>
+      <main className="md:pt-[52px] pb-[60px] md:pb-0">
         {currentView === 'home' && <HomeView />}
         {currentView === 'assessment' && <AssessmentView />}
-        {currentView === 'result' && <AssessmentView />} {/* Re-use component, internal state handles view */}
+        {currentView === 'result' && <AssessmentView />}
         {currentView === 'adjuster' && <AdjusterView />}
         {currentView === 'valuemark' && <ValuemarkView />}
         {currentView === 'b2b' && <B2BView />}
