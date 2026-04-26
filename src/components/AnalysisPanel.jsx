@@ -69,10 +69,11 @@ export default function AnalysisPanel({ onPaymentClick }) {
     }
   };
 
-  const grade = result?.Diagnosis_Assessment?.VNEXIS_Final_Grade;
-  const grounds = result?.Diagnosis_Assessment?.Legal_Grounds || [];
-  const cd = result?.Diagnosis_Assessment?.Clinical_Diagnosis;
-  const pf = result?.Diagnosis_Assessment?.Pathology_Finding;
+  const grade = result?.Final_Grade;
+  const grounds = result?.Legal_Basis || [];
+  const cs = result?.Coding_Standard;
+  const mo = result?.Medical_Opinion;
+  const ic = result?.Insurance_Coverage;
   const cta = result?.CTA_Logic;
   const ps = result?.Patient_Summary;
   const prob = Math.round((grade?.Probability || 0) * 100);
@@ -277,14 +278,14 @@ export default function AnalysisPanel({ onPaymentClick }) {
 
             {/* D→M→C 체인 */}
             <div className="bg-white border border-surface-border rounded-xl px-5 py-4">
-              <p className="font-mono text-[9px] tracking-widest text-slate-400 mb-3">D → M → C  역추론 체인</p>
+              <p className="font-mono text-[9px] tracking-widest text-slate-400 mb-3">KCD → WHO → ICD-11  코드 분류 체인</p>
               <div className="flex items-stretch overflow-hidden rounded-lg border border-surface-border">
                 {[
-                  { code: cd?.Code, name: cd?.Name, isFinal: false },
+                  { code: cs?.KCD_Code, name: cs?.KCD_Name, isFinal: false },
                   null,
-                  { code: pf?.Morphology_Code, name: pf?.Term, isFinal: false },
+                  { code: cs?.WHO_Classification, name: mo?.Pathology_Detail, isFinal: false },
                   null,
-                  { code: 'C코드', name: pf?.Assessment, isFinal: true },
+                  { code: cs?.ICD_Code, name: cs?.ICD_Name, isFinal: true },
                 ].map((node, i) =>
                   node === null ? (
                     <div key={i} className="flex items-center px-2 bg-slate-50 border-x border-surface-border text-slate-400 text-sm">→</div>
@@ -310,20 +311,20 @@ export default function AnalysisPanel({ onPaymentClick }) {
                     <div key={i} className={`py-3 ${i < grounds.length - 1 ? 'border-b border-surface-border' : ''}`}>
                       <div className="flex items-center gap-2 mb-1.5">
                         <span className={`font-mono text-[9px] px-2 py-0.5 rounded font-medium
-                          ${g.Source_Type === '판례' ? 'bg-brand-teal-dim text-brand-teal'
-                          : g.Source_Type === 'KCD' ? 'bg-brand-amber-dim text-brand-amber'
+                          ${g.Type === '판례' ? 'bg-brand-teal-dim text-brand-teal'
+                          : g.Type === '분쟁조정례' ? 'bg-brand-amber-dim text-brand-amber'
                           : 'bg-brand-blue-dim text-brand-blue'}`}>
-                          {g.Source_Type || '의무기록'}
+                          {g.Type || '의무기록'}
                         </span>
-                        <span className="font-sans text-[11px] text-slate-500">{g.ID}</span>
+                        <span className="font-sans text-[11px] text-slate-500">{g.Case_ID}</span>
                         <span className="font-mono text-[9px] text-slate-300 border border-surface-border rounded px-1.5 py-0.5 ml-auto">
-                          p.{g.Page_Number}
+                          p.{g.Source_Page}
                         </span>
                       </div>
-                      <p className="font-sans text-[12px] text-slate-600 leading-relaxed">{g.Summary}</p>
-                      {g.Evidence_Quote && (
+                      <p className="font-sans text-[12px] text-slate-600 leading-relaxed">{g.Key_Holding}</p>
+                      {g.Relevance && (
                         <p className="font-mono text-[10px] text-slate-400 bg-slate-50 px-2.5 py-1.5 rounded mt-1.5 border-l-2 border-slate-200">
-                          "{g.Evidence_Quote}"
+                          "{g.Relevance}"
                         </p>
                       )}
                     </div>
