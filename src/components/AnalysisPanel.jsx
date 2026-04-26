@@ -69,13 +69,13 @@ export default function AnalysisPanel({ onPaymentClick }) {
     }
   };
 
-  const grade = result?.Final_Grade;
+  const grade = result?.Final_Grade || {};
+  const opinion = result?.Medical_Opinion || {};
+  const coding = result?.Coding_Standard || {};
+  const coverage = result?.Insurance_Coverage || {};
   const grounds = result?.Legal_Basis || [];
-  const cs = result?.Coding_Standard;
-  const mo = result?.Medical_Opinion;
-  const ic = result?.Insurance_Coverage;
-  const cta = result?.CTA_Logic;
-  const ps = result?.Patient_Summary;
+  const cta = result?.CTA_Logic || {};
+  const ps = result?.Patient_Summary || {};
   const prob = Math.round((grade?.Probability || 0) * 100);
   const isApproved = grade?.Determination?.includes('일반암');
 
@@ -268,58 +268,78 @@ export default function AnalysisPanel({ onPaymentClick }) {
               </div>
             </div>
 
+            {/* 보험약관 커버리지 분석 */}
+            {coverage?.Coverage_Type && (
+              <div className="bg-white border border-surface-border rounded-xl px-5 py-4">
+                <p className="font-mono text-[9px] tracking-widest text-slate-400 mb-3">보험약관 커버리지 분석</p>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className={`font-mono text-[10px] px-2.5 py-1 rounded-full font-medium
+                    ${coverage.Meets_Definition ? 'bg-brand-teal-dim text-brand-teal' : 'bg-red-50 text-red-600'}`}>
+                    {coverage.Coverage_Type}
+                  </span>
+                  <span className={`font-sans text-[12px] font-medium ${coverage.Meets_Definition ? 'text-brand-teal' : 'text-red-500'}`}>
+                    {coverage.Meets_Definition ? '✓ 지급 요건 충족' : '⚠ 추가 검토 필요'}
+                  </span>
+                </div>
+                {coverage.Gap_Analysis && (
+                  <p className="font-sans text-[12px] text-slate-600 leading-relaxed">{coverage.Gap_Analysis}</p>
+                )}
+              </div>
+            )}
+
             {/* 제3자 전문가 소견 */}
             <div className="flex gap-3 bg-gradient-to-r from-brand-blue-dim to-brand-teal-dim border border-blue-100 rounded-xl px-4 py-3.5">
               <div className="w-0.5 bg-gradient-to-b from-brand-blue to-brand-teal rounded-full flex-shrink-0 self-stretch"></div>
               <div>
                 <p className="font-mono text-[9px] tracking-widest text-brand-blue mb-1.5">제3자 의료자문 소견</p>
                 <p className="font-sans text-[12px] text-blue-900 leading-relaxed">
-                  {mo?.Expert_Assessment ||
-                    `귀하의 진단서는 ${grade?.Determination} 판정을 받아 보험금 수령 가능성이 ${prob}%입니다. 보험사는 이 사실을 알리지 않습니다.`}
+                  {opinion?.Expert_Assessment ||
+                    `귀하의 진단서를 분석한 결과, ${grade.Determination || '판정 중'}으로 보험금 수령 가능성이 ${prob}%입니다.`}{' '}
+                  보험사는 이 사실을 알리지 않습니다.
                 </p>
               </div>
             </div>
 
             {/* 코딩 체인 / 임상 소견 (질병 유형별 동적 렌더링) */}
             <div className="bg-white border border-surface-border rounded-xl px-5 py-4">
-              {ic?.Coverage_Type?.includes('뇌') ? (
+              {coverage?.Coverage_Type?.includes('뇌') ? (
                 <>
                   <p className="font-mono text-[9px] tracking-widest text-slate-400 mb-3">뇌혈관질환 임상 소견</p>
                   <div className="space-y-1.5">
                     <div className="bg-slate-50 rounded-lg px-3 py-2.5">
                       <p className="font-mono text-[9px] text-slate-400 mb-1">임상 소견</p>
-                      <p className="font-sans text-[12px] text-navy leading-relaxed">{mo?.Clinical_Finding || '-'}</p>
+                      <p className="font-sans text-[12px] text-navy leading-relaxed">{opinion?.Clinical_Finding || '-'}</p>
                     </div>
                     <div className="bg-brand-teal-dim rounded-lg px-3 py-2.5">
                       <p className="font-mono text-[9px] text-brand-teal mb-1">영상/검사 소견</p>
-                      <p className="font-sans text-[12px] text-navy leading-relaxed">{mo?.Pathology_Detail || '-'}</p>
+                      <p className="font-sans text-[12px] text-navy leading-relaxed">{opinion?.Pathology_Detail || '-'}</p>
                     </div>
                   </div>
                 </>
-              ) : ic?.Coverage_Type?.includes('심') ? (
+              ) : coverage?.Coverage_Type?.includes('심') ? (
                 <>
                   <p className="font-mono text-[9px] tracking-widest text-slate-400 mb-3">심혈관질환 임상 소견</p>
                   <div className="space-y-1.5">
                     <div className="bg-slate-50 rounded-lg px-3 py-2.5">
                       <p className="font-mono text-[9px] text-slate-400 mb-1">임상 소견</p>
-                      <p className="font-sans text-[12px] text-navy leading-relaxed">{mo?.Clinical_Finding || '-'}</p>
+                      <p className="font-sans text-[12px] text-navy leading-relaxed">{opinion?.Clinical_Finding || '-'}</p>
                     </div>
                     <div className="bg-brand-teal-dim rounded-lg px-3 py-2.5">
                       <p className="font-mono text-[9px] text-brand-teal mb-1">심전도 / 효소 수치</p>
-                      <p className="font-sans text-[12px] text-navy leading-relaxed">{mo?.Pathology_Detail || '-'}</p>
+                      <p className="font-sans text-[12px] text-navy leading-relaxed">{opinion?.Pathology_Detail || '-'}</p>
                     </div>
                   </div>
                 </>
               ) : (
                 <>
-                  <p className="font-mono text-[9px] tracking-widest text-slate-400 mb-3">KCD → WHO → ICD-11  코드 분류 체인</p>
+                  <p className="font-mono text-[9px] tracking-widest text-slate-400 mb-3">KCD → WHO → ICD-11  코드 분류 확인</p>
                   <div className="flex items-stretch overflow-hidden rounded-lg border border-surface-border">
                     {[
-                      { code: cs?.KCD_Code, name: cs?.KCD_Name, isFinal: false },
+                      { code: coding?.KCD_Code, name: coding?.KCD_Name, isFinal: false },
                       null,
-                      { code: cs?.WHO_Classification, name: mo?.Pathology_Detail, isFinal: false },
+                      { code: coding?.ICD_Code, name: coding?.WHO_Classification?.slice(0, 30), isFinal: false },
                       null,
-                      { code: cs?.ICD_Code, name: cs?.ICD_Name, isFinal: true },
+                      { code: coverage?.Coverage_Type, name: coverage?.Meets_Definition ? '지급 타당' : '검토 필요', isFinal: true },
                     ].map((node, i) =>
                       node === null ? (
                         <div key={i} className="flex items-center px-2 bg-slate-50 border-x border-surface-border text-slate-400 text-sm">→</div>
@@ -335,12 +355,6 @@ export default function AnalysisPanel({ onPaymentClick }) {
                   </div>
                 </>
               )}
-              {ic?.Gap_Analysis && (
-                <div className="mt-3 bg-brand-amber-dim border border-amber-100 rounded-lg px-3 py-2.5">
-                  <p className="font-mono text-[9px] text-brand-amber mb-1">GAP ANALYSIS — 보험사 주장 vs 실제</p>
-                  <p className="font-sans text-[11px] text-slate-700 leading-relaxed">{ic.Gap_Analysis}</p>
-                </div>
-              )}
             </div>
 
             {/* 블러 게이트 */}
@@ -353,10 +367,10 @@ export default function AnalysisPanel({ onPaymentClick }) {
                     <div key={i} className={`py-3 ${i < grounds.length - 1 ? 'border-b border-surface-border' : ''}`}>
                       <div className="flex items-center gap-2 mb-1.5">
                         <span className={`font-mono text-[9px] px-2 py-0.5 rounded font-medium
-                          ${g.Type === '판례' ? 'bg-brand-teal-dim text-brand-teal'
-                          : g.Type === '분쟁조정례' ? 'bg-brand-amber-dim text-brand-amber'
+                          ${g.Type === '금감원분쟁조정례' ? 'bg-brand-amber-dim text-brand-amber'
+                          : g.Type === '대법원판례' ? 'bg-brand-teal-dim text-brand-teal'
                           : 'bg-brand-blue-dim text-brand-blue'}`}>
-                          {g.Type || '의무기록'}
+                          {g.Type || '근거'}
                         </span>
                         <span className="font-sans text-[11px] text-slate-500">{g.Case_ID}</span>
                         {g.Court_Date && (
