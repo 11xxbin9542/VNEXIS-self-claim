@@ -33,7 +33,20 @@ export async function analyzeDocument(file) {
       throw Object.assign(raw, { status: response.status });
     }
 
-    return response.json();
+    const rawText = await response.text();
+    console.log('[STATUS]', response.status);
+    console.log('[RESPONSE RAW]', rawText.slice(0, 500));
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch (e) {
+      throw Object.assign(new Error(`응답 파싱 실패: ${rawText.slice(0, 100)}`), { status: 502 });
+    }
+    if (!data.Final_Grade && !data.Medical_Opinion) {
+      console.warn('[경고] 빈 응답:', data);
+      throw Object.assign(new Error('분석 결과를 받지 못했습니다. 다시 시도해 주세요.'), { status: 502 });
+    }
+    return data;
   } catch (err) {
     throw new Error(humanizeError(err, err.status));
   } finally {
