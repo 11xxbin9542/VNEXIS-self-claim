@@ -1,5 +1,5 @@
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-const TIMEOUT_MS = 60000;
+const TIMEOUT_MS = 120000;
 
 function humanizeError(err, status) {
   if (err.name === 'AbortError') return '분석 시간이 초과되었습니다. 다시 시도해 주세요.';
