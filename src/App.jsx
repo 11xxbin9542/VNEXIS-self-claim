@@ -722,7 +722,7 @@ function App() {
       </nav>
 
       {/* ── 하단 Nav (모바일용) ── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-surface-border flex">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-surface-border flex" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         {[
           { icon: '⚕', label: 'AI 진단', idx: 0 },
           { icon: '👤', label: '손해사정사', idx: 1 },

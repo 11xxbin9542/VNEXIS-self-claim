@@ -42,15 +42,7 @@ export default function AnalysisPanel({ onPaymentClick }) {
     e.preventDefault();
     e.stopPropagation();
     setDragOver(false);
-    console.log('[DROP] 이벤트 발생');
-    console.log('[DROP] dataTransfer:', e.dataTransfer);
-    console.log('[DROP] files:', e.dataTransfer?.files);
-    console.log('[DROP] items:', e.dataTransfer?.items);
-    const file = e.dataTransfer?.files?.[0];
-    console.log('[DROP] file:', file);
-    console.log('[DROP] file.type:', file?.type);
-    console.log('[DROP] file.name:', file?.name);
-    handleFile(file);
+    handleFile(e.dataTransfer?.files?.[0]);
   }, [handleFile]);
 
   const analyze = async () => {
@@ -151,7 +143,7 @@ export default function AnalysisPanel({ onPaymentClick }) {
           <input
             type="file"
             accept="application/pdf"
-            className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+            className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
             onChange={e => handleFile(e.target.files?.[0])}
           />
           {file ? (
