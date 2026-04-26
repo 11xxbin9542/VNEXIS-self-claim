@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --navbar-height: 52px;
+  --bottom-nav-height: 60px;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,6 +26,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
@@ -28,11 +36,11 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard Variable", Pretendard, Roboto, "Noto Sans KR", "Segoe UI", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  background-color: #F8FAFC;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
   color: var(--color-text);
-  background-color: var(--color-background);
   line-height: 1.6;
-  letter-spacing: -0.02em;
 }
 
 /* 토스 스타일 타이포그래피 */
