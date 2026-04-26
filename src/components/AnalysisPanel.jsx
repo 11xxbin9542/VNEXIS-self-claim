@@ -48,6 +48,7 @@ export default function AnalysisPanel({ onPaymentClick }) {
   });
   const [showInsuranceForm, setShowInsuranceForm] = useState(false);
   const [insuranceSkipped, setInsuranceSkipped] = useState(false);
+  const [isConsented, setIsConsented] = useState(false);
 
   const handleFile = useCallback((f) => {
     if (!f) return;
@@ -64,6 +65,7 @@ export default function AnalysisPanel({ onPaymentClick }) {
     setResult(null);
     setInsuranceSkipped(false);
     setShowInsuranceForm(true);
+    setIsConsented(false);
   }, []);
 
   const handleDrop = useCallback((e) => {
@@ -330,6 +332,40 @@ export default function AnalysisPanel({ onPaymentClick }) {
           </div>
         )}
 
+        {/* ── 필수 동의 체크박스 ── */}
+        {file && !loading && !result && (
+          <label className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all
+            ${isConsented
+              ? 'bg-brand-teal-dim border-teal-200'
+              : 'bg-slate-50 border-surface-border hover:border-slate-300'
+            }`}>
+            <div className="flex-shrink-0 mt-0.5">
+              <input
+                type="checkbox"
+                checked={isConsented}
+                onChange={e => setIsConsented(e.target.checked)}
+                className="w-4 h-4 rounded accent-teal-600 cursor-pointer"
+              />
+            </div>
+            <div>
+              <p className={`font-sans text-[12px] font-semibold mb-1
+                ${isConsented ? 'text-brand-teal' : 'text-navy'}`}>
+                [필수] 민감 개인정보 즉시 파기 및 비식별 데이터 활용 동의
+              </p>
+              <p className="font-sans text-[11px] text-slate-500 leading-relaxed">
+                VNEXIS는 고객의 민감한 의료 정보를 보관하지 않습니다.
+                분석 리포트 생성 즉시 성명, 주민번호, 병원명 등 개인 식별 정보는
+                <strong className="text-slate-600"> 영구 파기</strong>되며,
+                이에 동의하셔야만 서비스 이용이 가능합니다.
+                <span className="block mt-1 text-slate-400">
+                  (단, 개인을 식별할 수 없도록 철저히 익명화된 진단 사례는
+                  AI 엔진 고도화 목적으로만 활용됩니다.)
+                </span>
+              </p>
+            </div>
+          </label>
+        )}
+
         {/* 약관 동의 안내 */}
         {file && !loading && !result && (
           <p className="font-sans text-[10px] text-slate-400 text-center leading-relaxed">
@@ -344,12 +380,14 @@ export default function AnalysisPanel({ onPaymentClick }) {
         {/* 분석 버튼 */}
         <button
           onClick={analyze}
-          disabled={!file || loading}
+          disabled={!file || !isConsented || loading}
           className={`w-full rounded-xl py-3.5 font-sans font-medium text-[14px] transition-all
             ${loading
               ? 'bg-slate-100 text-slate-500 border border-surface-border cursor-wait'
-              : 'bg-navy hover:bg-navy-80 text-white shadow-sm'
-            } disabled:opacity-40 disabled:cursor-not-allowed`}
+              : !isConsented
+                ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                : 'bg-navy hover:bg-navy-80 text-white shadow-sm'
+            } disabled:cursor-not-allowed`}
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">
