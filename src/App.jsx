@@ -746,12 +746,12 @@ function App() {
       {/* Main Content Area */}
       <main className="md:pt-[52px] pb-[60px] md:pb-0">
         {currentView === 'home' && <HomeView />}
-        {currentView === 'assessment' && <AssessmentView />}
-        {currentView === 'result' && <AssessmentView />}
+        {(currentView === 'assessment' || currentView === 'result' || currentView === 'analysis') && (
+          <AnalysisPanel onPaymentClick={() => setShowPaymentModal(true)} />
+        )}
         {currentView === 'adjuster' && <AdjusterView />}
         {currentView === 'valuemark' && <ValuemarkView />}
         {currentView === 'b2b' && <B2BView />}
-        {currentView === 'analysis' && <AnalysisPanel onPaymentClick={() => setShowPaymentModal(true)} />}
       </main>
 
       {/* Footer */}
