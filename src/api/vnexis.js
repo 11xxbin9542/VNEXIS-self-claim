@@ -12,13 +12,19 @@ function humanizeError(err, status) {
   return msg || `서버 오류 (${status ?? '알 수 없음'})`;
 }
 
-export async function analyzeDocument(file) {
+export async function analyzeDocument(file, insuranceInfo = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
     const formData = new FormData();
     formData.append('file', file);
+
+    if (insuranceInfo.company) formData.append('insurance_company', insuranceInfo.company);
+    if (insuranceInfo.type) formData.append('insurance_type', insuranceInfo.type);
+    if (insuranceInfo.year) formData.append('subscription_year', insuranceInfo.year);
+    if (insuranceInfo.month) formData.append('subscription_month', insuranceInfo.month);
+    if (insuranceInfo.productName) formData.append('product_name', insuranceInfo.productName);
 
     const response = await fetch(`${API_BASE}/api/vnexis/analyze`, {
       method: 'POST',

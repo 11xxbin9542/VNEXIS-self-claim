@@ -3,6 +3,23 @@ import { analyzeDocument } from '../api/vnexis';
 import Skeleton from './ui/Skeleton';
 import TermsModal from './TermsModal';
 
+const INSURANCE_COMPANIES = [
+  '삼성생명', '한화생명', '교보생명', 'NH농협생명', '신한라이프',
+  '메트라이프', '푸르덴셜생명', 'AIA생명', '미래에셋생명', 'DB생명',
+  '삼성화재', 'DB손해보험', 'KB손해보험', '현대해상', '메리츠화재',
+  '롯데손해보험', '한화손해보험', 'MG손해보험', '흥국화재', '기타'
+];
+
+const INSURANCE_TYPES = [
+  { value: 'cancer', label: '암보험' },
+  { value: 'brain_heart', label: '뇌·심장질환보험' },
+  { value: 'life', label: '종신/정기보험' },
+  { value: 'medical', label: '실손의료보험' },
+  { value: 'dementia', label: '치매보험' },
+  { value: 'whole', label: '건강보험(통합형)' },
+  { value: 'other', label: '기타' },
+];
+
 const STEPS = [
   { text: '문서 업로드 완료' },
   { text: '개인정보 보호 처리 중...' },
@@ -22,6 +39,15 @@ export default function AnalysisPanel({ onPaymentClick }) {
   const [ctaClicked, setCtaClicked] = useState(false);
   const [isPaid, setIsPaid] = useState(true);
   const [showTerms, setShowTerms] = useState(false);
+  const [insuranceInfo, setInsuranceInfo] = useState({
+    company: '',
+    type: '',
+    year: '',
+    month: '',
+    productName: '',
+  });
+  const [showInsuranceForm, setShowInsuranceForm] = useState(false);
+  const [insuranceSkipped, setInsuranceSkipped] = useState(false);
 
   const handleFile = useCallback((f) => {
     if (!f) return;
@@ -30,12 +56,14 @@ export default function AnalysisPanel({ onPaymentClick }) {
       return;
     }
     if (f.size > 50 * 1024 * 1024) {
-      setError('파일 크기가 50MB를 초과합니다.');
+      setError('파일이 너무 큽니다. 50MB 이하 파일을 사용해 주세요.');
       return;
     }
     setError(null);
     setFile(f);
     setResult(null);
+    setInsuranceSkipped(false);
+    setShowInsuranceForm(true);
   }, []);
 
   const handleDrop = useCallback((e) => {
@@ -57,7 +85,7 @@ export default function AnalysisPanel({ onPaymentClick }) {
     }, 6000);
 
     try {
-      const data = await analyzeDocument(file);
+      const data = await analyzeDocument(file, insuranceSkipped ? {} : insuranceInfo);
       clearInterval(timer);
       setStepIdx(STEPS.length - 1);
       setResult(data);
@@ -172,6 +200,133 @@ export default function AnalysisPanel({ onPaymentClick }) {
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 font-sans text-[12px] text-red-700 animate-fadeUp">
             ⚠️ {error}
+          </div>
+        )}
+
+        {/* ── 보험 정보 입력 폼 ── */}
+        {showInsuranceForm && !insuranceSkipped && !loading && !result && (
+          <div className="bg-white border border-surface-border rounded-xl overflow-hidden animate-fadeUp">
+            <div className="px-5 py-3 border-b border-surface-border bg-slate-50 flex items-center justify-between">
+              <div>
+                <p className="font-mono text-[9px] tracking-widest text-slate-400">보험 가입 정보</p>
+                <p className="font-sans text-[11px] text-slate-500 mt-0.5">
+                  입력할수록 분석 정확도가 높아집니다
+                </p>
+              </div>
+              <span className="font-mono text-[9px] bg-brand-blue-dim text-brand-blue px-2 py-0.5 rounded">
+                선택 입력
+              </span>
+            </div>
+            <div className="px-5 py-4 space-y-3">
+
+              {/* 보험사 + 종류 */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-mono text-[9px] text-slate-400 block mb-1.5">보험사</label>
+                  <select
+                    value={insuranceInfo.company}
+                    onChange={e => setInsuranceInfo(p => ({ ...p, company: e.target.value }))}
+                    className="w-full font-sans text-[12px] text-navy bg-slate-50 border border-surface-border rounded-lg px-3 py-2 focus:outline-none focus:border-brand-blue"
+                  >
+                    <option value="">선택 또는 직접 입력</option>
+                    {INSURANCE_COMPANIES.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="font-mono text-[9px] text-slate-400 block mb-1.5">보험 종류</label>
+                  <select
+                    value={insuranceInfo.type}
+                    onChange={e => setInsuranceInfo(p => ({ ...p, type: e.target.value }))}
+                    className="w-full font-sans text-[12px] text-navy bg-slate-50 border border-surface-border rounded-lg px-3 py-2 focus:outline-none focus:border-brand-blue"
+                  >
+                    <option value="">선택</option>
+                    {INSURANCE_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              {/* 가입일 — 연도 + 월 */}
+              <div>
+                <label className="font-mono text-[9px] text-slate-400 block mb-1.5">
+                  가입 연도 <span className="text-brand-blue">★ KCD 버전 자동 결정에 사용됩니다</span>
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    placeholder="예) 2019"
+                    min="1990"
+                    max="2026"
+                    value={insuranceInfo.year}
+                    onChange={e => setInsuranceInfo(p => ({ ...p, year: e.target.value }))}
+                    className="w-28 font-mono text-[12px] text-navy bg-slate-50 border border-surface-border rounded-lg px-3 py-2 focus:outline-none focus:border-brand-blue"
+                  />
+                  <span className="font-sans text-[12px] text-slate-400">년</span>
+                  <select
+                    value={insuranceInfo.month}
+                    onChange={e => setInsuranceInfo(p => ({ ...p, month: e.target.value }))}
+                    className="w-24 font-sans text-[12px] text-navy bg-slate-50 border border-surface-border rounded-lg px-3 py-2 focus:outline-none focus:border-brand-blue"
+                  >
+                    <option value="">월 선택</option>
+                    {Array.from({ length: 12 }, (_, i) => (
+                      <option key={i+1} value={String(i+1).padStart(2,'0')}>{i+1}월</option>
+                    ))}
+                  </select>
+                  <span className="font-sans text-[11px] text-slate-400 ml-1">월 (선택)</span>
+                </div>
+                {insuranceInfo.year && (
+                  <p className="font-mono text-[9px] text-brand-teal mt-1.5">
+                    → KCD-{
+                      parseInt(insuranceInfo.year) <= 2008 ? '5차' :
+                      parseInt(insuranceInfo.year) <= 2010 ? '6차' :
+                      parseInt(insuranceInfo.year) <= 2015 ? '7차' :
+                      parseInt(insuranceInfo.year) <= 2021 ? '7차 개정' : '8차'
+                    } 기준 적용 예정
+                  </p>
+                )}
+              </div>
+
+              {/* 상품명 (선택) */}
+              <div>
+                <label className="font-mono text-[9px] text-slate-400 block mb-1.5">
+                  보험 상품명 <span className="text-slate-300">(선택)</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="예) 삼성생명 무배당 암보험"
+                  value={insuranceInfo.productName}
+                  onChange={e => setInsuranceInfo(p => ({ ...p, productName: e.target.value }))}
+                  className="w-full font-sans text-[12px] text-navy bg-slate-50 border border-surface-border rounded-lg px-3 py-2 focus:outline-none focus:border-brand-blue"
+                />
+              </div>
+
+              {/* 안내 + 건너뛰기 */}
+              <div className="flex items-center justify-between pt-1">
+                <p className="font-sans text-[10px] text-slate-400">
+                  증권이 없으면 통장 납입 내역으로 연도를 확인해 주세요
+                </p>
+                <button
+                  onClick={() => setInsuranceSkipped(true)}
+                  className="font-sans text-[11px] text-slate-400 hover:text-navy underline transition-colors flex-shrink-0 ml-3"
+                >
+                  건너뛰기 →
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 건너뛴 경우 안내 */}
+        {insuranceSkipped && !loading && !result && (
+          <div className="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 animate-fadeUp">
+            <p className="font-sans text-[11px] text-amber-700">
+              ⚠ 가입일 미입력 — KCD-8차(최신) 기준으로 분석됩니다
+            </p>
+            <button
+              onClick={() => setInsuranceSkipped(false)}
+              className="font-sans text-[10px] text-amber-600 underline ml-3 flex-shrink-0"
+            >
+              입력하기
+            </button>
           </div>
         )}
 
