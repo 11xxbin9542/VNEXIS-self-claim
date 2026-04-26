@@ -268,37 +268,79 @@ export default function AnalysisPanel({ onPaymentClick }) {
               </div>
             </div>
 
-            {/* 후킹 메시지 */}
+            {/* 제3자 전문가 소견 */}
             <div className="flex gap-3 bg-gradient-to-r from-brand-blue-dim to-brand-teal-dim border border-blue-100 rounded-xl px-4 py-3.5">
               <div className="w-0.5 bg-gradient-to-b from-brand-blue to-brand-teal rounded-full flex-shrink-0 self-stretch"></div>
-              <p className="font-sans text-[12px] text-blue-900 leading-relaxed">
-                귀하의 진단서는 <strong className="font-medium">일반암(C코드)으로 인정받아</strong> 수천만 원의 숨은 보험금을 받을 확률이 {prob}%입니다. 보험사는 이 사실을 알리지 않습니다.
-              </p>
+              <div>
+                <p className="font-mono text-[9px] tracking-widest text-brand-blue mb-1.5">제3자 의료자문 소견</p>
+                <p className="font-sans text-[12px] text-blue-900 leading-relaxed">
+                  {mo?.Expert_Assessment ||
+                    `귀하의 진단서는 ${grade?.Determination} 판정을 받아 보험금 수령 가능성이 ${prob}%입니다. 보험사는 이 사실을 알리지 않습니다.`}
+                </p>
+              </div>
             </div>
 
-            {/* D→M→C 체인 */}
+            {/* 코딩 체인 / 임상 소견 (질병 유형별 동적 렌더링) */}
             <div className="bg-white border border-surface-border rounded-xl px-5 py-4">
-              <p className="font-mono text-[9px] tracking-widest text-slate-400 mb-3">KCD → WHO → ICD-11  코드 분류 체인</p>
-              <div className="flex items-stretch overflow-hidden rounded-lg border border-surface-border">
-                {[
-                  { code: cs?.KCD_Code, name: cs?.KCD_Name, isFinal: false },
-                  null,
-                  { code: cs?.WHO_Classification, name: mo?.Pathology_Detail, isFinal: false },
-                  null,
-                  { code: cs?.ICD_Code, name: cs?.ICD_Name, isFinal: true },
-                ].map((node, i) =>
-                  node === null ? (
-                    <div key={i} className="flex items-center px-2 bg-slate-50 border-x border-surface-border text-slate-400 text-sm">→</div>
-                  ) : (
-                    <div key={i} className={`flex-1 px-3 py-2.5 min-w-0 ${node.isFinal ? 'bg-brand-teal-dim' : 'bg-slate-50'}`}>
-                      <p className={`font-mono text-[12px] font-medium truncate ${node.isFinal ? 'text-brand-teal' : 'text-navy'}`}>
-                        {node.code}
-                      </p>
-                      <p className="font-sans text-[10px] text-slate-400 mt-0.5 truncate">{node.name}</p>
+              {ic?.Coverage_Type?.includes('뇌') ? (
+                <>
+                  <p className="font-mono text-[9px] tracking-widest text-slate-400 mb-3">뇌혈관질환 임상 소견</p>
+                  <div className="space-y-1.5">
+                    <div className="bg-slate-50 rounded-lg px-3 py-2.5">
+                      <p className="font-mono text-[9px] text-slate-400 mb-1">임상 소견</p>
+                      <p className="font-sans text-[12px] text-navy leading-relaxed">{mo?.Clinical_Finding || '-'}</p>
                     </div>
-                  )
-                )}
-              </div>
+                    <div className="bg-brand-teal-dim rounded-lg px-3 py-2.5">
+                      <p className="font-mono text-[9px] text-brand-teal mb-1">영상/검사 소견</p>
+                      <p className="font-sans text-[12px] text-navy leading-relaxed">{mo?.Pathology_Detail || '-'}</p>
+                    </div>
+                  </div>
+                </>
+              ) : ic?.Coverage_Type?.includes('심') ? (
+                <>
+                  <p className="font-mono text-[9px] tracking-widest text-slate-400 mb-3">심혈관질환 임상 소견</p>
+                  <div className="space-y-1.5">
+                    <div className="bg-slate-50 rounded-lg px-3 py-2.5">
+                      <p className="font-mono text-[9px] text-slate-400 mb-1">임상 소견</p>
+                      <p className="font-sans text-[12px] text-navy leading-relaxed">{mo?.Clinical_Finding || '-'}</p>
+                    </div>
+                    <div className="bg-brand-teal-dim rounded-lg px-3 py-2.5">
+                      <p className="font-mono text-[9px] text-brand-teal mb-1">심전도 / 효소 수치</p>
+                      <p className="font-sans text-[12px] text-navy leading-relaxed">{mo?.Pathology_Detail || '-'}</p>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="font-mono text-[9px] tracking-widest text-slate-400 mb-3">KCD → WHO → ICD-11  코드 분류 체인</p>
+                  <div className="flex items-stretch overflow-hidden rounded-lg border border-surface-border">
+                    {[
+                      { code: cs?.KCD_Code, name: cs?.KCD_Name, isFinal: false },
+                      null,
+                      { code: cs?.WHO_Classification, name: mo?.Pathology_Detail, isFinal: false },
+                      null,
+                      { code: cs?.ICD_Code, name: cs?.ICD_Name, isFinal: true },
+                    ].map((node, i) =>
+                      node === null ? (
+                        <div key={i} className="flex items-center px-2 bg-slate-50 border-x border-surface-border text-slate-400 text-sm">→</div>
+                      ) : (
+                        <div key={i} className={`flex-1 px-3 py-2.5 min-w-0 ${node.isFinal ? 'bg-brand-teal-dim' : 'bg-slate-50'}`}>
+                          <p className={`font-mono text-[12px] font-medium truncate ${node.isFinal ? 'text-brand-teal' : 'text-navy'}`}>
+                            {node.code}
+                          </p>
+                          <p className="font-sans text-[10px] text-slate-400 mt-0.5 truncate">{node.name}</p>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </>
+              )}
+              {ic?.Gap_Analysis && (
+                <div className="mt-3 bg-brand-amber-dim border border-amber-100 rounded-lg px-3 py-2.5">
+                  <p className="font-mono text-[9px] text-brand-amber mb-1">GAP ANALYSIS — 보험사 주장 vs 실제</p>
+                  <p className="font-sans text-[11px] text-slate-700 leading-relaxed">{ic.Gap_Analysis}</p>
+                </div>
+              )}
             </div>
 
             {/* 블러 게이트 */}
@@ -317,14 +359,17 @@ export default function AnalysisPanel({ onPaymentClick }) {
                           {g.Type || '의무기록'}
                         </span>
                         <span className="font-sans text-[11px] text-slate-500">{g.Case_ID}</span>
+                        {g.Court_Date && (
+                          <span className="font-mono text-[9px] text-slate-400 bg-slate-50 border border-surface-border rounded px-1.5 py-0.5">{g.Court_Date}</span>
+                        )}
                         <span className="font-mono text-[9px] text-slate-300 border border-surface-border rounded px-1.5 py-0.5 ml-auto">
                           p.{g.Source_Page}
                         </span>
                       </div>
                       <p className="font-sans text-[12px] text-slate-600 leading-relaxed">{g.Key_Holding}</p>
                       {g.Relevance && (
-                        <p className="font-mono text-[10px] text-slate-400 bg-slate-50 px-2.5 py-1.5 rounded mt-1.5 border-l-2 border-slate-200">
-                          "{g.Relevance}"
+                        <p className="font-sans text-[11px] text-brand-blue bg-brand-blue-dim px-2.5 py-1.5 rounded mt-1.5">
+                          적용 근거: {g.Relevance}
                         </p>
                       )}
                     </div>
