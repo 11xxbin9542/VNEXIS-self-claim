@@ -20,7 +20,7 @@ export default function AnalysisPanel({ onPaymentClick }) {
   const [dragOver, setDragOver] = useState(false);
   const [expandedEvidence, setExpandedEvidence] = useState(null);
   const [ctaClicked, setCtaClicked] = useState(false);
-  const [isPaid, setIsPaid] = useState(false);
+  const [isPaid, setIsPaid] = useState(true);
   const [showTerms, setShowTerms] = useState(false);
 
   const handleFile = useCallback((f) => {
