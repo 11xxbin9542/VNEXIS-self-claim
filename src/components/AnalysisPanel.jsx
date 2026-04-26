@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { analyzeDocument } from '../api/vnexis';
 import Skeleton from './ui/Skeleton';
+import TermsModal from './TermsModal';
 
 const STEPS = [
   { text: '문서 업로드 완료' },
@@ -20,6 +21,7 @@ export default function AnalysisPanel({ onPaymentClick }) {
   const [expandedEvidence, setExpandedEvidence] = useState(null);
   const [ctaClicked, setCtaClicked] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
 
   const handleFile = useCallback((f) => {
     if (!f) return;
@@ -179,6 +181,17 @@ export default function AnalysisPanel({ onPaymentClick }) {
             ⚠️ {error}
           </div>
         )}
+
+        {/* 약관 동의 안내 */}
+        {file && !loading && !result && (
+          <p className="font-sans text-[10px] text-slate-400 text-center leading-relaxed">
+            분석 시작 시{' '}
+            <span className="text-brand-blue underline cursor-pointer" onClick={() => setShowTerms(true)}>이용약관</span>{' '}및{' '}
+            <span className="text-brand-blue underline cursor-pointer" onClick={() => setShowTerms(true)}>비식별화 데이터 활용</span>에 동의하는 것으로 간주합니다.
+          </p>
+        )}
+
+        {showTerms && <TermsModal onClose={() => setShowTerms(false)} />}
 
         {/* 분석 버튼 */}
         <button
