@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@source "../../packages/ui/src/**/*.{js,ts,jsx,tsx}";
+
+@theme {
+  /* Colors */
+  --color-navy: #0B1629;
+  --color-navy-80: #1a2a45;
+  --color-navy-60: #2d4a7a;
+
+  --color-brand-blue: #1D4ED8;
+  --color-brand-blue-light: #3B82F6;
+  --color-brand-blue-dim: #EFF6FF;
+  --color-brand-teal: #0D9488;
+  --color-brand-teal-dim: #F0FDFA;
+  --color-brand-amber: #B45309;
+  --color-brand-amber-dim: #FFFBEB;
+
+  --color-surface-bg: #F8FAFC;
+  --color-surface-card: #FFFFFF;
+  --color-surface-border: #E2E8F0;
+  --color-surface-border-2: #CBD5E1;
+
+  /* Typography */
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, monospace;
+
+  /* Animations */
+  --animate-fade-up: fadeUp 0.3s ease forwards;
+
+  @keyframes fadeUp {
+    0%   { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}
+
+:root {
+  --navbar-height: 52px;
+  --bottom-nav-height: 60px;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: #F8FAFC;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}

@@ -10,7 +10,8 @@
       "PowerShell(Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::OpenRead\\(\"C:\\\\Users\\\\ASUS\\\\Desktop\\\\VNEXIS-self-claim\\\\files.zip\"\\).Entries | Select-Object Name, Length)",
       "PowerShell(cd C:\\\\Users\\\\ASUS\\\\Desktop\\\\VNEXIS-self-claim; $env:PYTHONIOENCODING=\"utf-8\"; python bulk_processor.py --folder ./back_data --dry-run)",
       "Bash(git commit *)",
-      "Bash(git tag *)"
+      "Bash(git tag *)",
+      "Bash(python -c \"print\\('Python OK'\\)\")"
     ]
   }
 }
