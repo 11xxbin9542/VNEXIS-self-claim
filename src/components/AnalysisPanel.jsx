@@ -106,6 +106,7 @@ export default function AnalysisPanel({ onPaymentClick }) {
   const grounds = result?.Legal_Basis || [];
   const cta = result?.CTA_Logic || {};
   const ps = result?.Patient_Summary || {};
+  const timeline = result?.Medical_Timeline || [];
   const prob = Math.round((grade?.Probability || 0) * 100);
   const isApproved = grade?.Determination?.includes('일반암');
 
@@ -489,6 +490,128 @@ export default function AnalysisPanel({ onPaymentClick }) {
                 ))}
               </div>
             </div>
+
+            {/* ── 진료 타임라인 ── */}
+            {timeline.length > 0 && (
+              <div className="bg-white border border-surface-border rounded-xl overflow-hidden">
+                <div className="px-5 py-3 border-b border-surface-border bg-slate-50
+                                flex items-center justify-between">
+                  <p className="font-mono text-[9px] tracking-widest text-slate-400">
+                    📅 날짜별 핵심 진료 타임라인
+                  </p>
+                  <span className="font-mono text-[9px] bg-slate-100 text-slate-500
+                                   px-2 py-0.5 rounded">
+                    총 {timeline.length}건
+                  </span>
+                </div>
+
+                {/* 첫 번째 — 무료 공개 */}
+                {timeline[0] && (
+                  <div className="px-5 py-4 border-b border-surface-border
+                                  border-l-4 border-l-brand-blue">
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 rounded-full bg-brand-blue
+                                      flex-shrink-0 mt-1.5"></div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 flex-wrap mb-1.5">
+                          <span className="font-mono text-[11px] font-medium text-navy">
+                            {timeline[0].Date}
+                          </span>
+                          {timeline[0].Department && (
+                            <span className="font-sans text-[11px] text-slate-600">
+                              | {timeline[0].Department}
+                            </span>
+                          )}
+                          {(timeline[0].Event_Type || timeline[0].Event) && (
+                            <span className="font-mono text-[9px] px-2 py-0.5 rounded
+                                             font-medium bg-brand-blue-dim text-brand-blue">
+                              {timeline[0].Event_Type || timeline[0].Event}
+                            </span>
+                          )}
+                        </div>
+                        <p className="font-sans text-[12px] text-slate-700 leading-relaxed">
+                          {timeline[0].Summary || timeline[0].Event}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 두 번째 이후 — 블러 + CTA */}
+                {timeline.length > 1 && (
+                  <div className="relative">
+                    <div className={`transition-all duration-500
+                      ${isPaid ? '' : 'blur-sm pointer-events-none select-none opacity-60'}`}>
+                      {timeline.slice(1).map((entry, i) => (
+                        <div key={i} className="px-5 py-3 border-b border-surface-border last:border-0">
+                          <div className="flex items-start gap-3">
+                            <div className="w-1.5 h-1.5 rounded-full bg-slate-300
+                                            flex-shrink-0 mt-2"></div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 flex-wrap mb-1">
+                                <span className="font-mono text-[11px] font-medium text-navy">
+                                  {entry.Date}
+                                </span>
+                                {entry.Department && (
+                                  <span className="font-sans text-[11px] text-slate-600">
+                                    | {entry.Department}
+                                  </span>
+                                )}
+                                {(entry.Event_Type || entry.Event) && (
+                                  <span className="font-mono text-[9px] px-2 py-0.5 rounded
+                                                   bg-slate-100 text-slate-500">
+                                    {entry.Event_Type || entry.Event}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="font-sans text-[12px] text-slate-600 leading-relaxed">
+                                {entry.Summary || entry.Event}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {!isPaid && (
+                      <div className="absolute inset-0 flex items-end justify-center
+                                      bg-gradient-to-b from-transparent via-white/60
+                                      to-white/98 p-4">
+                        <div className="bg-white border border-surface-border-2 rounded-xl
+                                        p-5 w-full text-center shadow-xl">
+                          <div className="w-9 h-9 bg-navy rounded-lg flex items-center
+                                          justify-center mx-auto mb-3 text-base">🔒</div>
+                          <p className="font-sans font-semibold text-[14px] text-navy mb-1">
+                            전체 타임라인 {timeline.length - 1}건 + 반론 근거 {grounds.length}건
+                          </p>
+                          <p className="font-sans text-[11px] text-slate-500
+                                        leading-relaxed mb-3">
+                            전체 진료 이력 · 판례 원문 · 금감원 조정례<br/>
+                            보험사 제출용 대응 스크립트
+                          </p>
+                          <div className="flex flex-wrap gap-1.5 justify-center mb-4">
+                            {['전체 타임라인','판례 원문','금감원 조정례','제출 스크립트'].map(c => (
+                              <span key={c} className="font-sans text-[10px] bg-slate-50
+                                border border-surface-border rounded-full px-2.5 py-1
+                                text-slate-500">{c}</span>
+                            ))}
+                          </div>
+                          <button
+                            onClick={() => onPaymentClick?.()}
+                            className="w-full bg-navy hover:bg-navy-80 text-white font-sans
+                                       font-semibold text-[13px] py-3 rounded-xl
+                                       transition-colors shadow-md">
+                            📄 상세 리포트 받기 (유료)
+                          </button>
+                          <p className="font-mono text-[10px] text-slate-400 mt-2">
+                            결제 후 즉시 열람 · 보험사 제출용 PDF 포함
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* ── 3. 제3자 의료자문 소견 ── */}
             <div className="bg-white border border-surface-border rounded-xl overflow-hidden">
