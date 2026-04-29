@@ -22,13 +22,21 @@ export default async function DashboardPage() {
 
   // 테넌트 API Key 서버에서 조회 (클라이언트에 안전하게 전달)
   const sb = createServiceClient();
-  const { data: profile } = await sb
+  const { data: userProfile } = await sb
     .from('users')
-    .select('tenant_id, tenants(api_key)')
+    .select('tenant_id')
     .eq('id', user.id)
     .single();
 
-  const apiKey = (profile?.tenants as { api_key?: string } | null)?.api_key ?? null;
+  let apiKey: string | null = null;
+  if (userProfile?.tenant_id) {
+    const { data: tenant } = await sb
+      .from('tenants')
+      .select('api_key')
+      .eq('id', userProfile.tenant_id)
+      .single();
+    apiKey = tenant?.api_key ?? null;
+  }
 
   return (
     <main className="min-h-screen bg-[#F8FAFC] p-8">
