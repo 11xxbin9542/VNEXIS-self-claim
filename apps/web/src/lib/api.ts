@@ -27,6 +27,12 @@ export async function analyzeDocument(
 
     if (!response.ok) {
       const err = await response.json().catch(() => ({ detail: response.statusText }));
+
+      // 한도 초과 특별 처리
+      if (response.status === 429) {
+        throw new Error(`⚠️ ${err.detail || '분석 한도를 초과했습니다.'}`);
+      }
+
       throw new Error(err.detail || `서버 오류 (${response.status})`);
     }
 
